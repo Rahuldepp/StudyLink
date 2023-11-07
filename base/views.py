@@ -28,7 +28,10 @@ def loginPage(request):
 
       if user is not None:
          login(request,user)
-         return redirect("/")      
+         if page_to_load := request.GET.get('next', None):
+            print('NEXT:', page_to_load)
+            return redirect(page_to_load)
+         return redirect("/")
       else:
          messages.error(request,"User name or password is incorrect")
    context={'page':page}
@@ -160,7 +163,7 @@ def createRoom(request):  # sourcery skip: use-named-expression
 # -------------------------------------------------------------------------
 # to update room data
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def updateRoom(request,pk):  # sourcery skip: use-named-expression
    # geting data from the room through id 
    room = Room.objects.get(id=pk)
@@ -196,7 +199,7 @@ def updateRoom(request,pk):  # sourcery skip: use-named-expression
 # ---------------------------------------------------------------
 # to delete a room
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def deleteRoom(request,pk):
    room = Room.objects.get(id=pk)
     # saving from unauthenticated user to deleteRoom
@@ -212,7 +215,7 @@ def deleteRoom(request,pk):
 # ---------------------------------------------------------------
 # to delete a message
 
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def deleteMessage(request,pk):
     message = Message.objects.get(id=pk)
     if request.user !=message.user:
@@ -229,7 +232,7 @@ def deleteMessage(request,pk):
 
 # ------------------------------------
 # update user profile
-@login_required(login_url='/login')
+@login_required(login_url='login')
 def updateUser(request):
    user=request.user
    form = UserForm(instance=user)
@@ -263,5 +266,5 @@ def topicPage(request):
 # for activity page
 def activityPage(request):
    room_messages=Message.objects.all()
-   return render(request,"base/activity.html",{'room_messages':room_messages})
+   return render(request,"base/activity_component.html",{'room_messages':room_messages})
 
