@@ -11,11 +11,7 @@ class MyUserCreationForm(UserCreationForm):
         fields=['name', 'email','username', 'password1', 'password2']
 
 
-
-
-
 # 
-
 
 
 class RoomForm(ModelForm):

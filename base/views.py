@@ -101,7 +101,6 @@ def room(request ,pk):
          room=room,
          body=request.POST.get('body'),
 
-
       ) 
       # first add a user if someone is trying  to comment
       room.participants.add(request.user)
